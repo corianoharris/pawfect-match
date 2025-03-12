@@ -6,7 +6,7 @@
 
 Pawfect Match is a modern, user-friendly dog adoption platform that connects potential pet owners with their ideal canine companions. The application streamlines the dog adoption process by providing an intuitive interface for browsing, filtering, and matching with available dogs.
 
-**[Live Demo](https://pawfect-match.vercel.app)** 👈 Click here to see the app in action!
+**[Live Demo](https://pawfect-match-rosy.vercel.app)** 👈 Click here to see the app in action!
 
 ## 👤 User Persona: Meet Sarah
 
