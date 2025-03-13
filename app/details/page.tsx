@@ -23,7 +23,7 @@ interface Dog {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
-export default function MatchPage() {
+export default function DetailPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const dogId = searchParams.get("id")
@@ -59,14 +59,6 @@ export default function MatchPage() {
         const data = await response.json()
         setDog(data[0])
 
-        // Trigger confetti effect
-        setTimeout(() => {
-          confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 },
-          })
-        }, 500)
       } catch (error) {
         toast({
           title: "Error",
@@ -125,9 +117,8 @@ export default function MatchPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <PartyPopper className="w-8 h-8 mr-2 text-turquoise-500 animate-pulse-scale" />
           <h1 className="text-3xl font-bold text-center text-turquoise-800 dark:text-turquoise-200">
-            Congratulations! You've been matched!
+            Hey! Learn more about lovable {dog.name}.
           </h1>
         </motion.div>
 
@@ -138,12 +129,12 @@ export default function MatchPage() {
         >
           <Card className="max-w-6xl mx-auto overflow-hidden border-turquoise-200 dark:border-gray-700 shadow-xl">
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="relative aspect-[16/9] md:aspect-auto lg:aspect-stretch w-full bg-turquoise-100 dark:bg-turquoise-900/20">
+              <div className="relative aspect-[16/9] md:aspect-auto lg:aspect-auto w-full bg-turquoise-100 dark:bg-turquoise-900/20">
                 <Image
                   src={dog.img || "/placeholder.svg?height=600&width=600"}
                   alt={dog.name}
                   fill
-                  className="object-cover"
+                  className="object-cover "
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute top-4 left-4 flex space-x-2">
@@ -171,20 +162,6 @@ export default function MatchPage() {
 
                 <CardContent className="px-0 py-4 flex-grow">
                   <div className="space-y-6">
-                    <motion.div
-                      className="bg-turquoise-50 dark:bg-turquoise-900/10 rounded-lg p-4 border border-turquoise-100 dark:border-turquoise-900/30"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.5, delay: 0.6 }}
-                    >
-                      <h3 className="text-lg font-semibold text-turquoise-700 dark:text-turquoise-300 mb-2">
-                        Perfect Match!
-                      </h3>
-                      <p className="text-gray-600 dark:text-gray-300">
-                        Based on your preferences, {dog.name} is your ideal companion. This {dog.age}-year-old{" "}
-                        {dog.breed} can't wait to meet you!
-                      </p>
-                    </motion.div>
 
                     <div>
                       <h3 className="text-lg font-semibold text-turquoise-700 dark:text-turquoise-300">Breed</h3>

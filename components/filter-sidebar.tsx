@@ -214,9 +214,9 @@ export function FilterSidebar({
         >
           Clear
         </Button>
-        <Button onClick={applyFilters} className="flex-1 bg-turquoise-600 hover:bg-turquoise-700 text-white">
+        {/* <Button onClick={applyFilters} className="flex-1 bg-turquoise-600 hover:bg-turquoise-700 text-white">
           Apply
-        </Button>
+        </Button> */}
       </div>
     </div>
   )

@@ -67,10 +67,6 @@ export function FilterSearchBar({
             onChange={(e) => setSearchBreed(e.target.value)}
             className="pl-10 border-turquoise-200 focus:border-turquoise-400 dark:border-gray-700 shadow-md"
           />
-         
-            
-          
-
 
           {/* Breed suggestions dropdown */}
           {searchBreed && filteredBreeds.length > 0 && (

@@ -14,7 +14,7 @@ import
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
-import { Heart, LogOut, ArrowUpDown, Search, Loader2, PawPrint } from "lucide-react"
+import { Heart, LogOut, ArrowUpDown, Loader2, PawPrint, Menu } from "lucide-react"
 import { toast } from "@/hooks/use-toast"
 import { DogCard } from "@/components/dog-card"
 import { FilterSidebar } from "@/components/filter-sidebar"
@@ -213,45 +213,48 @@ export default function DogsPage()
     }
   }
 
-  const handleMatch = async () =>
-  {
-    if (favorites.length === 0)
-    {
+  const handleMatch = async () => {
+    if (favorites.length === 0) {
       toast({
         title: "No favorites selected",
         description: "Please select at least one dog to find a match.",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
-    try
-    {
+  console.log("favorites", favorites);
+  
+    try {
+      // Randomly select a dog from the favorites array
+      const randomIndex = Math.floor(Math.random() * favorites.length);
+      const selectedDogId = favorites[randomIndex];
+      console.log("selectedDogId", selectedDogId);
+  
+      // Make API call with just the selected dog's ID
       const response = await fetch(`${API_BASE_URL}/dogs/match`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(favorites),
+        body: JSON.stringify(favorites.filter((id) => id === selectedDogId)), // Send just the randomly selected ID
         credentials: "include",
-      })
-
-      if (!response.ok)
-      {
-        throw new Error("Failed to find a match")
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to find a match");
       }
-
-      const data = await response.json()
-      router.push(`/match?id=${data.match}`)
-    } catch (error)
-    {
+  
+      const data = await response.json();
+      router.push(`/match?id=${data.match}`);
+    } catch (error) {
       toast({
         title: "Error",
         description: "Failed to find a match. Please try again.",
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   const toggleSortOrder = () =>
   {
@@ -337,12 +340,12 @@ export default function DogsPage()
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.3 }}
-            className="sticky top-0 z-10 mt-2 bg-white dark:bg-gray-900 border-b border-turquoise-100 dark:border-gray-700 shadow-sm"
+            className="sticky top-0 z-50 mt-0 bg-white dark:bg-gray-900 border-b border-turquoise-100 dark:border-gray-700 shadow-sm"
           >
             <div className="container flex flex-col gap-2 mt-2 items-center  flex-wrap md:flex-row h-16 px-4 mx-auto">
               <div className="flex items-center md:hidden">
                 <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-                  <Search className="w-5 h-5 text-turquoise-600 dark:text-turquoise-400" />
+                  <Menu className="w-full h-full text-turquoise-600 dark:text-turquoise-400" />
                 </Button>
               </div>
 

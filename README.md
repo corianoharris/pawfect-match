@@ -51,23 +51,23 @@ Pawfect Match addresses Sarah's needs by providing:
 - Sort options for better discovery
 - Responsive sidebar for mobile and desktop
 
-### 💖 Smart Matching System
+### Smart Matching System
 - Algorithm to match users with compatible dogs
 - Favorites tracking for personalized recommendations
 - Match confirmation with detailed compatibility explanation
 
-### 🎨 Modern, Accessible UI
+### Modern, Accessible UI
 - Visually appealing dog cards with key information
 - Dark/light mode toggle for different viewing preferences
 - Responsive design that works on all devices
 - Animations and micro-interactions for an engaging experience
 
-### ⚡ Performance Optimizations
+### Performance Optimizations
 - Virtualized lists for smooth scrolling with large datasets
 - React Query for efficient data fetching and caching
 - Optimized images for fast loading
 
-## 🛠️ Technologies & Libraries
+## Technologies & Libraries
 
 ### Core Framework
 - **Next.js**: React framework for server-rendered applications
@@ -91,7 +91,7 @@ Pawfect Match addresses Sarah's needs by providing:
 - **Jest & React Testing Library**: Unit and component testing
 - **Cypress**: End-to-end testing
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js 16.8 or later
