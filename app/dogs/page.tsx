@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import { Button } from "@/components/ui/button"
@@ -20,6 +20,7 @@ import { DogCard } from "@/components/dog-card"
 import { FilterSidebar } from "@/components/filter-sidebar"
 import { motion, AnimatePresence } from "framer-motion"
 import { FilterSearchBar } from "@/components/filter-searchbar"
+import FeaturedBreed  from "@/components/featuredBreed"
 
 interface Dog
 {
@@ -289,6 +290,10 @@ export default function DogsPage()
     )
   }
 
+
+  
+  const featuredBreed = useMemo(() => breeds[Math.floor(Math.random() * breeds.length)], [breeds]);
+
   return (
     <div
       className={`min-h-screen bg-gradient-to-br from-turquoise-50 to-white dark:from-gray-900 dark:to-gray-800 ${isDarkMode ? "dark" : ""}`}
@@ -358,8 +363,12 @@ export default function DogsPage()
                 onClose={() => setIsSidebarOpen(false)}
               />
 
+
+
               {/* Selected breeds display */}
               <div className="hidden md:flex flex-wrap gap-2 align-middle items-start overflow-x-auto max-w-full ml-2 mr-24">
+
+
                 {selectedBreeds.map((breed, index) => (
                   <div key={index} className="flex items-center bg-turquoise-100 dark:bg-gray-700 px-2 py-1 rounded-full text-xs">
                     <span className="mr-1">{breed}</span>
@@ -510,6 +519,10 @@ export default function DogsPage()
               transition={{ duration: 0.5 }}
               className="mb-8"
             >
+              <div className="flex flex-row gap-2 mb-4 items-center justify-center  dark:bg-gray-700 px-2 py-1 rounded-full text-xs">
+                  <FeaturedBreed breed={featuredBreed} />
+                </div>
+
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl font-bold text-turquoise-800 dark:text-turquoise-200">Featured Dogs</h2>
                 <Button variant="link" className="text-turquoise-600 dark:text-turquoise-400">
@@ -536,7 +549,7 @@ export default function DogsPage()
                             ? "Dogs our staff think deserve extra attention"
                             : "These loving dogs need special care"}
                       </p>
-                      <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
+                      <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none" onClick={() => router.push(`/explore/${i === 1 ? "new-arrivals" : i === 2 ? "staff-picks" : "special-needs"}`)}>
                         Explore
                       </Button>
                     </div>
