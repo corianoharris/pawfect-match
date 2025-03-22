@@ -165,7 +165,10 @@ export default function CategoryExplore({ category }: { category: string }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-turquoise-50 to-white dark:from-gray-900 dark:to-gray-800">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-900 border-b border-turquoise-100 dark:border-gray-700 shadow-sm">
+      <header
+        className="bg-white dark:bg-gray-900 border-b border-turquoise-100 dark:border-gray-700 shadow-sm"
+        role="banner"
+      >
         <div className="container flex items-center justify-between h-16 px-4 mx-auto">
           <div className="flex items-center space-x-4">
             <Button
@@ -173,12 +176,16 @@ export default function CategoryExplore({ category }: { category: string }) {
               size="icon"
               onClick={() => router.push("/dogs")}
               className="text-gray-600 dark:text-gray-300"
+              aria-label="Back to all dogs"
             >
-              <ChevronLeft className="h-5 w-5" />
+              <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+              <span className="sr-only">Back</span>
             </Button>
             <div className="flex items-center space-x-2">
-              <PawPrint className="h-6 w-6 text-turquoise-500" />
-              <h1 className={`text-xl font-bold ${config.color}`}>{config.title}</h1>
+              <PawPrint className="h-6 w-6 text-turquoise-500" aria-hidden="true" />
+              <h1 className={`text-xl font-bold ${config.color}`} tabIndex={0}>
+                {config.title}
+              </h1>
             </div>
           </div>
 
@@ -186,6 +193,7 @@ export default function CategoryExplore({ category }: { category: string }) {
             variant="ghost"
             onClick={() => router.push("/dogs")}
             className="text-turquoise-700 dark:text-turquoise-300"
+            aria-label="View all available dogs"
           >
             View All Dogs
           </Button>
@@ -193,32 +201,46 @@ export default function CategoryExplore({ category }: { category: string }) {
       </header>
 
       {/* Main content */}
-      <main className="container px-4 py-8 mx-auto">
+      <main className="container px-4 py-8 mx-auto" id="main-content" aria-labelledby="category-title">
         {/* Category banner */}
-        <motion.div
+        <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className={`${config.bgColor} rounded-lg shadow-lg p-6 mb-8 text-white`}
+          aria-labelledby="category-title"
         >
-          <h2 className="text-2xl md:text-3xl font-bold mb-2">{config.title}</h2>
-          <p className="text-white/90 mb-4">{config.description}</p>
-         
-        </motion.div>
+          <h2 id="category-title" className="text-2xl md:text-3xl font-bold mb-2" tabIndex={0}>
+            {config.title}
+          </h2>
+          <p className="text-white/90 mb-4" tabIndex={0}>
+            {config.description}
+          </p>
+        </motion.section>
 
         {/* Dogs grid */}
-        <div className="mb-8">
+        <section className="mb-8" aria-labelledby="featured-dogs-heading">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-turquoise-800 dark:text-turquoise-200">Featured {config.title}</h2>
+            <h2
+              id="featured-dogs-heading"
+              className="text-2xl font-bold text-turquoise-800 dark:text-turquoise-200"
+              tabIndex={0}
+            >
+              Featured {config.title}
+            </h2>
             {favorites.length > 0 && (
               <Button
                 variant="outline"
                 onClick={handleMatch}
                 className="relative border-turquoise-200 dark:border-gray-700 text-turquoise-700 dark:text-turquoise-300"
+                aria-label={`Find a match from ${favorites.length} favorite dogs`}
               >
-                <Heart className="w-4 h-4 mr-2 fill-turquoise-500 text-turquoise-500" />
+                <Heart className="w-4 h-4 mr-2 fill-turquoise-500 text-turquoise-500" aria-hidden="true" />
                 Match
-                <span className="absolute -top-2 -right-2 bg-turquoise-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <span
+                  className="absolute -top-2 -right-2 bg-turquoise-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
+                  aria-label={`${favorites.length} favorites selected`}
+                >
                   {favorites.length}
                 </span>
               </Button>
@@ -226,15 +248,18 @@ export default function CategoryExplore({ category }: { category: string }) {
           </div>
 
           {dogsLoading ? (
-            <div className="flex items-center justify-center h-64">
-              <Loader2 className="w-8 h-8 animate-spin text-turquoise-500" />
+            <div className="flex items-center justify-center h-64" role="status" aria-live="polite">
+              <Loader2 className="w-8 h-8 animate-spin text-turquoise-500" aria-hidden="true" />
+              <span className="sr-only">Loading dogs, please wait...</span>
             </div>
           ) : dogsData && dogsData.length > 0 ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4"
+              className="flex flex-wrap justify-center gap-6"
+              role="list"
+              aria-label={`Dogs in ${config.title} category`}
             >
               {dogsData.map((dog) => (
                 <motion.div
@@ -242,47 +267,65 @@ export default function CategoryExplore({ category }: { category: string }) {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
+                  className="w-[300px]"
+                  role="listitem"
                 >
                   <DogCard
                     dog={dog}
                     isFavorite={favorites.includes(dog.id)}
                     onToggleFavorite={() => toggleFavorite(dog.id)}
+                    
                   />
                 </motion.div>
               ))}
             </motion.div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-64 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-turquoise-100 dark:border-gray-700">
-              <p className="text-lg text-gray-500 dark:text-gray-400 mb-4">No dogs found in this category</p>
+            <div
+              className="flex flex-col items-center justify-center h-64 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-turquoise-100 dark:border-gray-700"
+              role="alert"
+              aria-live="assertive"
+            >
+              <p className="text-lg text-gray-500 dark:text-gray-400 mb-4" tabIndex={0}>
+                No dogs found in this category
+              </p>
               <Button
                 variant="outline"
                 onClick={() => router.push("/dogs")}
                 className="border-turquoise-200 text-turquoise-700 dark:border-gray-700 dark:text-turquoise-300"
+                aria-label="Browse all available dogs"
               >
                 Browse All Dogs
               </Button>
             </div>
           )}
-        </div>
+        </section>
 
         {/* Call to action */}
-        <motion.div
+        <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
           className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-turquoise-100 dark:border-gray-700 p-6 text-center"
+          aria-labelledby="cta-heading"
         >
-          <h3 className="text-xl font-bold text-turquoise-800 dark:text-turquoise-200 mb-2">Find Your Perfect Match</h3>
-          <p className="text-gray-600 dark:text-gray-300 mb-4">
+          <h3
+            id="cta-heading"
+            className="text-xl font-bold text-turquoise-800 dark:text-turquoise-200 mb-2"
+            tabIndex={0}
+          >
+            Find Your Perfect Match
+          </h3>
+          <p className="text-gray-600 dark:text-gray-300 mb-4" tabIndex={0}>
             Browse our complete collection of dogs to find your new best friend.
           </p>
           <Button
             onClick={() => router.push("/dogs")}
             className="bg-gradient-to-r from-turquoise-500 to-turquoise-600 hover:from-turquoise-600 hover:to-turquoise-700 text-white"
+            aria-label="View all available dogs for adoption"
           >
             View All Dogs
           </Button>
-        </motion.div>
+        </motion.section>
       </main>
     </div>
   )
