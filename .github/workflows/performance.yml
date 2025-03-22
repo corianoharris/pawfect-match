@@ -20,23 +20,40 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'npm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build app
-        run: npm run build
-        env:
-          NEXT_PUBLIC_API_BASE_URL: ${{ vars.NEXT_PUBLIC_API_BASE_URL }}
+        run: pnpm run build
+        # Removed env variables - Vercel will handle this
 
       - name: Start server
-        run: npm start &
-        env:
-          NEXT_PUBLIC_API_BASE_URL: ${{ vars.NEXT_PUBLIC_API_BASE_URL }}
+        run: pnpm start &
+        # Removed env variables - Vercel will handle this
 
       - name: Wait for server
-        run: npx wait-on http://localhost:3000 -t 60000
+        run: pnpm dlx wait-on http://localhost:3000 -t 60000
 
       # Using Lighthouse CI instead of the non-existent web-vitals-reporter
       - name: Run Lighthouse performance tests
@@ -51,4 +68,3 @@ jobs:
       - name: Stop server
         if: always()
         run: pkill -f "node" || true
-
