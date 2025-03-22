@@ -55,11 +55,20 @@ jobs:
       - name: Wait for server
         run: pnpm dlx wait-on http://localhost:3000 -t 60000
 
+      - name: Install Chrome
+        run: |
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
       - name: Run axe accessibility tests
         run: |
-          pnpm dlx @axe-core/cli http://localhost:3000 --exit --tags wcag2a,wcag2aa --stdout
-          pnpm dlx @axe-core/cli http://localhost:3000/dogs --exit --tags wcag2a,wcag2aa --stdout
-          pnpm dlx @axe-core/cli http://localhost:3000/details?id=dog1 --exit --tags wcag2a,wcag2aa --stdout
+          export CHROME_BIN=/usr/bin/google-chrome
+          pnpm add -g @axe-core/cli
+          pnpm exec axe http://localhost:3000 --exit --tags wcag2a,wcag2aa --stdout
+          pnpm exec axe http://localhost:3000/dogs --exit --tags wcag2a,wcag2aa --stdout
+          pnpm exec axe http://localhost:3000/details?id=dog1 --exit --tags wcag2a,wcag2aa --stdout
 
       - name: Stop server
         if: always()
