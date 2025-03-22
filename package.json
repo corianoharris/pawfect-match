@@ -1,5 +1,5 @@
 {
-  "name": "Pawfect-Match",
+  "name": "pawfect-match",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,8 +11,8 @@
     "test:watch": "jest --watch",
     "cypress": "cypress open",
     "cypress:headless": "cypress run",
-    "e2e": "start-server-and-test dev http://localhost:3000 cypress",
-    "e2e:headless": "start-server-and-test dev http://localhost:3000 cypress:headless"
+    "cypress:open": "start-server-and-test 'next dev' http-get://localhost:3000 'cypress open'",
+    "cypress:run": "start-server-and-test 'next dev' http-get://localhost:3000 'cypress run'"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
