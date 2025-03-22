@@ -58,6 +58,7 @@
     "date-fns": "4.1.0",
     "embla-carousel-react": "8.5.1",
     "eslint": "^9.23.0",
+    "eslint-config-next": "^15.2.3",
     "framer-motion": "latest",
     "input-otp": "1.4.1",
     "jest": "^29.7.0",
