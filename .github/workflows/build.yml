@@ -54,12 +54,25 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Option 1: Create ESLint config if it doesn't exist
+      - name: Setup ESLint config
+        run: |
+          if [ ! -f .eslintrc.json ]; then
+            echo '{
+              "extends": "next/core-web-vitals"
+            }' > .eslintrc.json
+          fi
+
+      # Option 2: Skip lint if you prefer
+      # - name: Lint (skipped)
+      #   run: echo "Skipping lint step in CI"
+
+      # Original lint step (use after creating config)
       - name: Lint
         run: pnpm run lint
 
       - name: Build application
         run: pnpm run build
-        # Removed env variables - Vercel will handle this
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -117,7 +130,6 @@ jobs:
 
       - name: Start server
         run: pnpm start &
-        # Removed env variables - Vercel will handle this
 
       - name: Wait for server
         run: pnpm dlx wait-on http://localhost:3000 -t 60000
