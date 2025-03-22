@@ -46,24 +46,22 @@ jobs:
 
       - name: Build app
         run: pnpm run build
-        # Removed env variables - Vercel will handle this
 
       - name: Start server
         run: pnpm start &
-        # Removed env variables - Vercel will handle this
 
       - name: Wait for server
         run: pnpm dlx wait-on http://localhost:3000 -t 60000
 
-      # Using Lighthouse CI instead of the non-existent web-vitals-reporter
+      # Using Lighthouse CI with modified configuration
       - name: Run Lighthouse performance tests
         uses: treosh/lighthouse-ci-action@v9
         with:
           urls: |
             http://localhost:3000
             http://localhost:3000/dogs
-          uploadArtifacts: true
-          temporaryPublicStorage: true
+          uploadArtifacts: false  # Disable GitHub artifact upload
+          temporaryPublicStorage: true  # Use temporary public storage instead
 
       - name: Stop server
         if: always()

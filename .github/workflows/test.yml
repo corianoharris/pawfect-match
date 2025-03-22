@@ -80,16 +80,22 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v5
-        with:
-          build: pnpm run build
-          start: pnpm start
-          wait-on: 'http://localhost:3000'
-          wait-on-timeout: 120
-          browser: chrome
-          record: false
-        # Removed env variables - Vercel will handle this
+      # Replace Cypress GitHub Action with manual Cypress run
+      - name: Build app
+        run: pnpm run build
+
+      - name: Start server
+        run: pnpm start &
+
+      - name: Wait for server
+        run: pnpm dlx wait-on http://localhost:3000 -t 60000
+
+      - name: Run Cypress tests
+        run: pnpm dlx cypress run --browser chrome
+
+      - name: Stop server
+        if: always()
+        run: pkill -f "node" || true
 
   lighthouse:
     name: Lighthouse Audit
@@ -128,11 +134,9 @@ jobs:
 
       - name: Build app
         run: pnpm run build
-        # Removed env variables - Vercel will handle this
 
       - name: Start server in background
         run: pnpm start &
-        # Removed env variables - Vercel will handle this
 
       - name: Wait for server
         run: pnpm dlx wait-on http://localhost:3000 -t 60000
@@ -143,9 +147,10 @@ jobs:
           urls: |
             http://localhost:3000
             http://localhost:3000/dogs
-          uploadArtifacts: true
+          uploadArtifacts: false
           temporaryPublicStorage: true
-          configPath: './.github/lighthouse/config.json'
+          # Remove configPath if the file doesn't exist
+          # configPath: './.github/lighthouse/config.json'
 
       - name: Stop server
         if: always()
