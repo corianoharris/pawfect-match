@@ -1,0 +1,31 @@
+name: Setup Environment Variables
+
+on:
+  workflow_dispatch:
+    inputs:
+      api_base_url:
+        description: 'API Base URL'
+        required: true
+        default: 'https://api.example.com'
+
+jobs:
+  setup-env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set environment variables
+        run: |
+          echo "Setting up environment variables for the repository"
+          echo "API Base URL: ${{ github.event.inputs.api_base_url }}"
+      
+      - name: Set repository variable
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.actions.createOrUpdateRepoVariable({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'NEXT_PUBLIC_API_BASE_URL',
+              value: '${{ github.event.inputs.api_base_url }}'
+            });
+
