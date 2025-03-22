@@ -46,11 +46,9 @@ jobs:
 
       - name: Build app
         run: pnpm run build
-        # Removed env variable - Vercel will handle this
 
       - name: Start server
         run: pnpm start &
-        # Removed env variable - Vercel will handle this
 
       - name: Wait for server
         run: pnpm dlx wait-on http://localhost:3000 -t 60000
@@ -65,10 +63,11 @@ jobs:
       - name: Run axe accessibility tests
         run: |
           export CHROME_BIN=/usr/bin/google-chrome
-          pnpm add -g @axe-core/cli
-          pnpm exec axe http://localhost:3000 --exit --tags wcag2a,wcag2aa --stdout
-          pnpm exec axe http://localhost:3000/dogs --exit --tags wcag2a,wcag2aa --stdout
-          pnpm exec axe http://localhost:3000/details?id=dog1 --exit --tags wcag2a,wcag2aa --stdout
+          # Use npm instead of pnpm for axe-core to avoid build script issues
+          npm install -g @axe-core/cli
+          axe http://localhost:3000 --exit --tags wcag2a,wcag2aa --stdout
+          axe http://localhost:3000/dogs --exit --tags wcag2a,wcag2aa --stdout
+          axe http://localhost:3000/details?id=dog1 --exit --tags wcag2a,wcag2aa --stdout
 
       - name: Stop server
         if: always()
