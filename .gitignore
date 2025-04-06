@@ -28,4 +28,6 @@ next-env.d.ts
 # IDEs
 .idea/
 
-.DS_store
+# mac
+.DS_Store
+.swc

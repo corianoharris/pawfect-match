@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+      "jsx": "react",
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["./*"]
+      },
+      "types": ["jest", "@testing-library/jest-dom"]
+    },
+    "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
+    "exclude": ["node_modules"]
+  }

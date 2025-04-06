@@ -210,7 +210,7 @@ export default function LoginPage() {
             </div>
           </CardFooter>
         </Card>
-        <div className="text-center mt-4" tabIndex={0}>
+        <div className="text-center mt-4 hidden" tabIndex={0}>
           Don&apos;t have an account?{" "}
           <Link
             href="/register"
